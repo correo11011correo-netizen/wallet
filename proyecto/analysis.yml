@@ -1,0 +1,52 @@
+
+files:
+  - name: check_eth_balance.py
+    description: Verifica el saldo de una dirección de Ethereum consultando una lista predefinida de puntos de conexión RPC públicos.
+    dependencies: [requests, sys]
+    notes: "Diseñado para desarrollo y pruebas. No usar con fondos reales."
+
+  - name: derive_addresses.py
+    description: Deriva direcciones de Ethereum y Bitcoin a partir de frases mnemotécnicas (semillas) utilizando derivación no reforzada BIP32.
+    dependencies: [os, sys, json, hashlib, hmac, "lib/metamask_verifier.py", "lib/keccak.py", "lib/secp256k1.py"]
+    notes: "Puede tomar frases mnemotécnicas como entrada del usuario o leerlas desde un archivo valid_seeds.json. Guarda los resultados en derived_addresses.json."
+
+  - name: format_wordlist_plain.py
+    description: Convierte un archivo de lista de palabras con palabras separadas por espacios en un nuevo archivo con una palabra por línea.
+    dependencies: []
+    notes: "Un script de utilidad para formatear una lista de palabras, probablemente para ser utilizada por otros scripts."
+
+  - name: gen_addresses.py
+    description: Genera las dos primeras direcciones de Ethereum a partir de una frase mnemotécnica BIP39.
+    dependencies: ["lib/bip39seed.py", "lib/bip44coin.py", "lib/bip44.py"]
+    notes: "Diseñado para fines de demostración o prueba. Se basa en la biblioteca para implementaciones de BIP39 y BIP44."
+
+  - name: gen_mnemonic_address.py
+    description: Genera una nueva frase mnemotécnica de 12 palabras, deriva la primera dirección de Ethereum y guarda ambas en un archivo JSON.
+    dependencies: [os, json, "lib/mnemonic.py", "lib/bip39seed.py", "lib/bip44coin.py", "lib/bip44.py"]
+    notes: "Útil para crear nuevas billeteras para pruebas. Depende del archivo de lista de palabras limpio creado por format_wordlist_plain.py."
+
+  - name: main.py
+    description: Demuestra un flujo de trabajo completo de billetera HD, incluida la generación mnemotécnica, la creación de semillas y la derivación de múltiples direcciones de Ethereum.
+    dependencies: [os, "lib/mnemonic.py", "lib/bip39seed.py", "lib/bip44coin.py", "lib/bip44.py"]
+    notes: "Sirve como una prueba integral y demostración de las capacidades de la billetera."
+
+  - name: test_rpc.py
+    description: Prueba la conectividad y funcionalidad de una lista de puntos de conexión RPC definidos en un archivo JSON (rpcs.json) y verifica el saldo de una dirección de Ethereum.
+    dependencies: [json, requests, os]
+    notes: "Una herramienta útil para verificar el estado de los puntos de conexión RPC. Duplicado de test_rpcs.py."
+
+  - name: test_rpcs.py
+    description: Prueba la conectividad y funcionalidad de una lista de puntos de conexión RPC definidos en un archivo JSON (rpcs.json) y verifica el saldo de una dirección de Ethereum.
+    dependencies: [json, requests, os]
+    notes: "Duplicado de test_rpc.py."
+
+code_duplication:
+  - files: [test_rpc.py, test_rpcs.py]
+    description: "Estos dos archivos son idénticos. Uno de ellos debería ser eliminado para evitar redundancia."
+
+recommendations:
+  - "Refactorizar el código de verificación de saldo de `check_eth_balance.py`, `test_rpc.py` y `test_rpcs.py` en una única función o módulo para evitar la duplicación de lógica."
+  - "Centralizar la configuración de los puntos de conexión RPC en un único archivo de configuración (como ya se hace con rpcs.json) y utilizarlo en todos los scripts relevantes."
+  - "Crear un módulo principal o CLI que permita al usuario acceder a las diferentes funcionalidades (generar dirección, verificar saldo, etc.) desde un único punto de entrada."
+  - "Añadir manejo de errores más robusto y mensajes de usuario más claros."
+  - "Considerar la creación de un archivo `requirements.txt` para gestionar las dependencias de Python."

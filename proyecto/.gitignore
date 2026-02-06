@@ -1,0 +1,5 @@
+mnemonic_address.json
+derived_addresses.json
+valid_seeds.json
+__pycache__/
+*.swp
